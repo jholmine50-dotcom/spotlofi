@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SpotLo-fi · Painel de uso</title>
+<meta name="robots" content="noindex">
+<style>
+:root{
+  --bg:#07070b;--text:#f5f5f7;--muted:rgba(245,245,247,.62);--faint:rgba(245,245,247,.4);--line:rgba(255,255,255,.1);
+  --green:#2ad46a;--mac:#a78bfa;--win:#60a5fa;--android:#34d399;--web:#f59e0b;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Inter,Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{font-family:var(--font);color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;font-size:14px;overflow-x:hidden}
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:
+  radial-gradient(60vmax 60vmax at 0% 0%,rgba(42,212,106,.22),transparent 60%),
+  radial-gradient(55vmax 55vmax at 100% 100%,rgba(96,165,250,.18),transparent 60%),
+  radial-gradient(40vmax 40vmax at 70% 10%,rgba(167,139,250,.14),transparent 60%)}
+.wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:28px 16px 48px}
+.glass{background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.12);
+  -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 18px 50px rgba(0,0,0,.35);border-radius:22px}
+header{display:flex;align-items:center;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+.logo{width:44px;height:44px;border-radius:50%;background:var(--green);display:grid;place-items:center;box-shadow:0 0 24px rgba(42,212,106,.5);flex:none}
+.logo svg{width:28px;height:28px}
+h1{font-size:22px;font-weight:700;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:13px;margin-top:2px}
+.status{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);padding:8px 14px;border-radius:999px}
+.dot{width:8px;height:8px;border-radius:50%;background:#ff9f0a;flex:none}
+.dot.ok{background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.45}}
+.kpis{display:grid;grid-template-columns:1.6fr repeat(5,1fr);gap:12px;margin-bottom:14px}
+.kpi{padding:16px 16px 14px}
+.kpi b{display:block;font-size:34px;font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1.1}
+.kpi span{font-size:12px;color:var(--muted)}
+.kpi.big{position:relative;overflow:hidden}
+.kpi.big b{font-size:56px}
+.kpi.big::after{content:"";position:absolute;right:-30px;top:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(rgba(42,212,106,.45),transparent 70%)}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px}
+.card{padding:18px}
+.card h2{font-size:12px;font-weight:600;color:var(--faint);text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.card h2 small{text-transform:none;letter-spacing:0;font-weight:500}
+svg.chart{width:100%;height:220px;display:block}
+.plat{display:flex;flex-direction:column;gap:12px}
+.pr{display:grid;grid-template-columns:86px 1fr 72px;align-items:center;gap:10px;font-size:13px}
+.pr .bar{height:10px;border-radius:10px;background:rgba(255,255,255,.08);overflow:hidden}
+.pr .bar i{display:block;height:100%;border-radius:10px;transition:width .6s}
+.pr .n{text-align:right;color:var(--muted);font-variant-numeric:tabular-nums;font-size:12px}
+.legend{display:flex;gap:14px;font-size:11.5px;color:var(--muted);margin-top:8px;flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:11px;color:var(--faint);font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:0 8px 8px}
+td{padding:8px;border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
+td .tag{white-space:nowrap;font-size:11px;padding:2px 8px;border-radius:999px;background:rgba(255,255,255,.08)}
+.tbl-wrap{max-height:340px;overflow:auto}
+.vers{display:flex;flex-direction:column;gap:6px}
+.vr{display:flex;justify-content:space-between;font-size:13px;padding:6px 10px;border-radius:10px;background:rgba(255,255,255,.05)}
+.vr span:last-child{color:var(--muted);font-variant-numeric:tabular-nums}
+.empty{color:var(--faint);font-size:12.5px;padding:8px 0}
+footer{color:var(--faint);font-size:11.5px;line-height:1.6;margin-top:18px;text-align:center}
+@media (max-width:980px){.kpis{grid-template-columns:repeat(3,1fr)}.kpi.big{grid-column:span 3}.grid{grid-template-columns:1fr}}
+@media (max-width:520px){.kpis{grid-template-columns:repeat(2,1fr)}.kpi.big{grid-column:span 2}.kpi b{font-size:28px}.kpi.big b{font-size:46px}.status{margin-left:0}}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="wrap">
+  <header>
+    <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="13.5" width="4" height="7" rx="1.6" fill="#000"/><rect x="17" y="13.5" width="4" height="7" rx="1.6" fill="#000"/><path d="M9.5 13.5l2.5-1 2.5 1v5l-2.5-1-2.5 1z"/></svg></div>
+    <div><h1>SpotLo-fi · Painel de uso</h1><div class="sub">Quantas pessoas estão usando o app agora, em tempo real</div></div>
+    <div class="status glass" id="status"><span class="dot" id="dot"></span><span id="statusTx">Conectando…</span></div>
+  </header>
+
+  <section class="kpis">
+    <div class="kpi big glass"><b id="kOnline">0</b><span>usando agora</span></div>
+    <div class="kpi glass"><b id="kPlaying">0</b><span>ouvindo música agora</span></div>
+    <div class="kpi glass"><b id="kTogether">0</b><span>no Estudar junto</span></div>
+    <div class="kpi glass"><b id="kToday">0</b><span>usaram hoje</span></div>
+    <div class="kpi glass"><b id="kWeek">0</b><span>nos últimos 7 dias</span></div>
+    <div class="kpi glass"><b id="kTotal">0</b><span>aparelhos no total</span></div>
+  </section>
+
+  <section class="grid">
+    <div class="card glass">
+      <h2>Online ao longo do tempo <small id="chartInfo">desde que este painel foi aberto neste navegador</small></h2>
+      <svg class="chart" id="chart" viewBox="0 0 800 220" preserveAspectRatio="none"></svg>
+    </div>
+    <div class="card glass">
+      <h2>Por sistema</h2>
+      <div class="plat" id="plat"></div>
+      <div class="legend"><span><i style="background:rgba(255,255,255,.55)"></i>online agora</span><span><i style="background:rgba(255,255,255,.18)"></i>total</span></div>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="card glass">
+      <h2>Atividade recente <small id="lastUpd"></small></h2>
+      <div class="tbl-wrap"><table><thead><tr><th>Aparelho</th><th>Sistema</th><th>Versão</th><th>Status</th><th>Visto</th></tr></thead><tbody id="recent"></tbody></table></div>
+    </div>
+    <div class="card glass">
+      <h2>Versões em uso</h2>
+      <div class="vers" id="vers"></div>
+    </div>
+  </section>
+
+  <footer>Os números vêm do sinal anônimo que o SpotLo-fi envia a cada minuto (um código aleatório por aparelho, o sistema, a versão e se está tocando). Quem desliga “Contar meu uso” nos Ajustes não aparece aqui.<br>“Online ao longo do tempo” é guardado só neste navegador, a partir do momento em que o painel é aberto.</footer>
+</div>
+
+<script src="https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js"></script>
+<script>
+// ===== configuração: precisa ser igual à do app =====
+const KEY = 'k-7f3a91c2';
+const BROKERS = ['wss://broker.emqx.io:8084/mqtt', 'wss://broker.hivemq.com:8884/mqtt'];
+const ONLINE_WINDOW = 150 * 1000;   // considerado online se mandou sinal nos últimos 2,5 min
+// ======================================================
+
+const OS = { mac: ['Mac', 'var(--mac)'], win: ['Windows', 'var(--win)'], android: ['Android', 'var(--android)'], web: ['Navegador', 'var(--web)'] };
+const devices = new Map();
+const conns = {};
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const ago = (t) => { const s = (Date.now() - t) / 1000; if (s < 60) return 'agora'; if (s < 3600) return Math.floor(s / 60) + ' min'; if (s < 86400) return Math.floor(s / 3600) + ' h'; return Math.floor(s / 86400) + ' d'; };
+const isOnline = (d) => d.online !== false && Date.now() - d.t < ONLINE_WINDOW;
+
+let history = [];
+try { history = JSON.parse(localStorage.getItem('slf-panel-hist') || '[]').filter((p) => Date.now() - p.t < 24 * 3600 * 1000); } catch (e) {}
+
+function onMsg(topic, buf) {
+  let d; try { d = JSON.parse(new TextDecoder().decode(buf)); } catch (e) { return; }
+  if (!d || !d.id || !d.t || typeof d.t !== 'number') return;
+  if (d.t > Date.now() + 5 * 60 * 1000) return;                 // ignora relógio maluco
+  const old = devices.get(d.id);
+  if (!old || d.t >= old.t) devices.set(d.id, d);
+  schedule();
+}
+
+function connect(url, i) {
+  const c = mqtt.connect(url, { clientId: 'slfpanel_' + Math.random().toString(36).slice(2, 10), keepalive: 60, reconnectPeriod: 10000, connectTimeout: 15000, clean: true });
+  conns[i] = { c, ok: false };
+  c.on('connect', () => { conns[i].ok = true; c.subscribe(`spotlofi/v1/${KEY}/u/+`, { qos: 0 }); updStatus(); });
+  c.on('close', () => { conns[i].ok = false; updStatus(); });
+  c.on('error', () => {});
+  c.on('message', onMsg);
+}
+function updStatus() {
+  const n = Object.values(conns).filter((x) => x.ok).length;
+  $('dot').classList.toggle('ok', n > 0);
+  $('statusTx').textContent = n ? `Ao vivo · ${n} servidor${n > 1 ? 'es' : ''}` : 'Reconectando…';
+}
+
+let pending = 0;
+function schedule() { if (!pending) pending = setTimeout(() => { pending = 0; render(); }, 250); }
+
+function render() {
+  const all = [...devices.values()];
+  const now = Date.now();
+  const day0 = new Date(); day0.setHours(0, 0, 0, 0);
+  const online = all.filter(isOnline);
+  $('kOnline').textContent = online.length;
+  $('kPlaying').textContent = online.filter((d) => d.playing).length;
+  $('kTogether').textContent = online.filter((d) => d.together).length;
+  $('kToday').textContent = all.filter((d) => d.t >= day0.getTime()).length;
+  $('kWeek').textContent = all.filter((d) => now - d.t < 7 * 86400 * 1000).length;
+  $('kTotal').textContent = all.length;
+
+  const max = Math.max(1, ...Object.keys(OS).map((k) => all.filter((d) => d.os === k).length));
+  $('plat').innerHTML = Object.entries(OS).map(([k, [name, color]]) => {
+    const tot = all.filter((d) => d.os === k).length, on = online.filter((d) => d.os === k).length;
+    return `<div class="pr"><span>${name}</span><div class="bar" style="position:relative"><i style="width:${tot / max * 100}%;background:${color};opacity:.25;position:absolute;inset:0 auto 0 0"></i><i style="width:${on / max * 100}%;background:${color};position:absolute;inset:0 auto 0 0"></i></div><span class="n">${on} / ${tot}</span></div>`;
+  }).join('');
+
+  const vers = {};
+  for (const d of all.filter((d) => now - d.t < 7 * 86400 * 1000)) { const k = `${(OS[d.os] || [d.os])[0]} ${d.v}`; vers[k] = (vers[k] || 0) + 1; }
+  const vl = Object.entries(vers).sort((a, b) => b[1] - a[1]);
+  $('vers').innerHTML = vl.length ? vl.map(([k, n]) => `<div class="vr"><span>${esc(k)}</span><span>${n}</span></div>`).join('') : '<div class="empty">Ainda sem dados.</div>';
+
+  const recent = all.sort((a, b) => b.t - a.t).slice(0, 40);
+  $('recent').innerHTML = recent.length ? recent.map((d) => {
+    const on = isOnline(d), [name, color] = OS[d.os] || [d.os, 'var(--muted)'];
+    const st = !on ? '<span class="tag">offline</span>' : d.playing ? '<span class="tag" style="background:rgba(42,212,106,.25)">🎵 ouvindo</span>' : '<span class="tag" style="background:rgba(42,212,106,.12)">aberto</span>';
+    return `<tr><td>#${esc(String(d.id).slice(0, 6))}${d.together ? ' 👥' : ''}</td><td><span style="color:${color}">●</span> ${esc(name)}</td><td>${esc(d.v)}</td><td>${st}</td><td>${ago(d.t)}</td></tr>`;
+  }).join('') : '<tr><td colspan="5" class="empty">Esperando o primeiro sinal… abra o SpotLo-fi em algum aparelho.</td></tr>';
+  $('lastUpd').textContent = 'atualizado ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
+
+function sample() {
+  const n = [...devices.values()].filter(isOnline).length;
+  history.push({ t: Date.now(), n });
+  history = history.filter((p) => Date.now() - p.t < 24 * 3600 * 1000);
+  try { localStorage.setItem('slf-panel-hist', JSON.stringify(history)); } catch (e) {}
+  drawChart();
+}
+function drawChart() {
+  const W = 800, H = 220, P = 26;
+  const pts = history.slice(-400);
+  const svg = $('chart');
+  if (pts.length < 2) { svg.innerHTML = `<text x="${W / 2}" y="${H / 2}" fill="rgba(245,245,247,.4)" font-size="13" text-anchor="middle">O gráfico aparece depois de alguns minutos com o painel aberto</text>`; return; }
+  const t0 = pts[0].t, t1 = pts[pts.length - 1].t || t0 + 1, mx = Math.max(2, ...pts.map((p) => p.n));
+  const x = (t) => P + (t - t0) / Math.max(1, t1 - t0) * (W - P * 2), y = (n) => H - P - n / mx * (H - P * 2);
+  const line = pts.map((p, i) => `${i ? 'L' : 'M'}${x(p.t).toFixed(1)},${y(p.n).toFixed(1)}`).join(' ');
+  const area = `${line} L${x(t1).toFixed(1)},${H - P} L${x(t0).toFixed(1)},${H - P} Z`;
+  const grid = [0, .5, 1].map((f) => { const v = Math.round(mx * f), yy = y(v); return `<line x1="${P}" x2="${W - P}" y1="${yy}" y2="${yy}" stroke="rgba(255,255,255,.07)"/><text x="${P - 6}" y="${yy + 4}" fill="rgba(245,245,247,.4)" font-size="11" text-anchor="end">${v}</text>`; }).join('');
+  const lab = (t, anchor, xx) => `<text x="${xx}" y="${H - 6}" fill="rgba(245,245,247,.4)" font-size="11" text-anchor="${anchor}">${new Date(t).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</text>`;
+  svg.innerHTML = `<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2ad46a" stop-opacity=".45"/><stop offset="1" stop-color="#2ad46a" stop-opacity="0"/></linearGradient></defs>${grid}<path d="${area}" fill="url(#g)"/><path d="${line}" fill="none" stroke="#2ad46a" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>${lab(t0, 'start', P)}${lab(t1, 'end', W - P)}`;
+}
+
+if (window.mqtt) BROKERS.forEach(connect);
+else { $('statusTx').textContent = 'Não consegui carregar a conexão (verifique a internet)'; }
+render(); drawChart();
+setInterval(render, 15000);
+setTimeout(sample, 4000);
+setInterval(sample, 30000);
+</script>
+</body>
+</html>

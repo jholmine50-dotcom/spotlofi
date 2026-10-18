@@ -1,0 +1,15 @@
+{
+  "version": "1.1.5",
+  "zip": "SpotLo-fi-v1.1.5.zip",
+  "notes": "Mini player sem a barra de baixo e com botão de sair, histórico de pesquisa, 'Tocadas recentemente' só com o que você ouviu de verdade.",
+  "win": {
+    "version": "1.1.5",
+    "zip": "SpotLo-fi-Windows-app-v1.1.5.zip",
+    "notes": "Mini player sem a barra de baixo e com botão de sair, histórico de pesquisa, 'Tocadas recentemente' só com o que você ouviu de verdade."
+  },
+  "android": {
+    "version": "1.1.5",
+    "apk": "SpotLo-fi-1.1.5.apk",
+    "notes": "Mini player sem a barra de baixo e com botão de sair, histórico de pesquisa, 'Tocadas recentemente' só com o que você ouviu de verdade."
+  }
+}
