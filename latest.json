@@ -1,15 +1,15 @@
 {
-  "version": "1.1.7",
-  "zip": "SpotLo-fi-v1.1.7.zip",
-  "notes": "Atualização automática mais segura: fecha a versão antiga e reabre na nova; se algo falhar, avisa e continua aberto.",
+  "version": "1.1.8",
+  "zip": "SpotLo-fi-v1.1.8.zip",
+  "notes": "Fechar a janela agora encerra o app por completo. Janela ocupa a tela toda e fica fácil de arrastar pela barra de cima e pela faixa da dock.",
   "win": {
-    "version": "1.1.7",
-    "zip": "SpotLo-fi-Windows-app-v1.1.7.zip",
-    "notes": "Atualização automática refeita: agora baixa, troca e reabre sozinho, sem script escondido. Corrige o número da versão que ficava em 1.1.2."
+    "version": "1.1.8",
+    "zip": "SpotLo-fi-Windows-app-v1.1.8.zip",
+    "notes": "Fechar a janela agora encerra o app por completo. Janela ocupa a tela toda e fica fácil de arrastar pela barra de cima e pela faixa da dock."
   },
   "android": {
-    "version": "1.1.7",
-    "apk": "SpotLo-fi-1.1.7.apk",
+    "version": "1.1.8",
+    "apk": "SpotLo-fi-1.1.8.apk",
     "notes": "Melhorias gerais."
   }
 }
