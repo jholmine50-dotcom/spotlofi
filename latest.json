@@ -1,16 +1,16 @@
 {
-  "version": "1.2.0",
-  "zip": "ListenUp-v1.2.0.zip",
-  "notes": "SpotLo-fi agora é ListenUp: logo nova, fonte Space Grotesk e animação de abertura.",
+  "version": "1.2.1",
+  "zip": "ListenUp-v1.2.1.zip",
+  "notes": "Título com fundo para ler melhor, abertura nova (aparece também no celular), histórico de pesquisa ao clicar na busca e o app não abaixa mais a própria música.",
   "win": {
-    "version": "1.2.0",
-    "zip": "ListenUp-Windows-app-v1.2.0.zip",
-    "notes": "SpotLo-fi agora é ListenUp: logo nova, fonte Space Grotesk e animação de abertura.",
-    "installer": "ListenUp-Windows-v1.2.0.zip"
+    "version": "1.2.1",
+    "zip": "ListenUp-Windows-app-v1.2.1.zip",
+    "notes": "Título com fundo para ler melhor, abertura nova (aparece também no celular), histórico de pesquisa ao clicar na busca e o app não abaixa mais a própria música.",
+    "installer": "ListenUp-Windows-v1.2.1.zip"
   },
   "android": {
-    "version": "1.2.0",
-    "apk": "ListenUp-1.2.0.apk",
-    "notes": "SpotLo-fi agora é ListenUp: logo nova, fonte Space Grotesk e animação de abertura."
+    "version": "1.2.1",
+    "apk": "ListenUp-1.2.1.apk",
+    "notes": "Título com fundo para ler melhor, abertura nova (aparece também no celular), histórico de pesquisa ao clicar na busca e o app não abaixa mais a própria música."
   }
 }
