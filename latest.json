@@ -1,16 +1,16 @@
 {
-  "version": "1.2.3",
-  "zip": "ListenUp-v1.2.3.zip",
-  "notes": "Nome ListenUp mais destacado no topo, com caixa escura translúcida.",
+  "version": "1.2.4",
+  "zip": "ListenUp-v1.2.4.zip",
+  "notes": "Nome ListenUp no topo com caixa escura translúcida e o Up sem brilho.",
   "win": {
-    "version": "1.2.3",
-    "zip": "ListenUp-Windows-app-v1.2.3.zip",
-    "notes": "Nome ListenUp mais destacado no topo, com caixa escura translúcida.",
-    "installer": "ListenUp-Windows-v1.2.3.zip"
+    "version": "1.2.4",
+    "zip": "ListenUp-Windows-app-v1.2.4.zip",
+    "notes": "Nome ListenUp no topo com caixa escura translúcida e o Up sem brilho.",
+    "installer": "ListenUp-Windows-v1.2.4.zip"
   },
   "android": {
-    "version": "1.2.3",
-    "apk": "ListenUp-1.2.3.apk",
-    "notes": "Nome ListenUp mais destacado no topo, com caixa escura translúcida."
+    "version": "1.2.4",
+    "apk": "ListenUp-1.2.4.apk",
+    "notes": "Nome ListenUp no topo com caixa escura translúcida e o Up sem brilho."
   }
 }
