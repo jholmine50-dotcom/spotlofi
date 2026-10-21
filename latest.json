@@ -1,16 +1,16 @@
 {
-  "version": "1.2.1",
-  "zip": "ListenUp-v1.2.1.zip",
-  "notes": "Título com fundo para ler melhor, abertura nova (aparece também no celular), histórico de pesquisa ao clicar na busca e o app não abaixa mais a própria música.",
+  "version": "1.2.2",
+  "zip": "ListenUp-v1.2.2.zip",
+  "notes": "Ícone novo com a logo maior e visível em qualquer tema do Mac.",
   "win": {
-    "version": "1.2.1",
-    "zip": "ListenUp-Windows-app-v1.2.1.zip",
-    "notes": "Título com fundo para ler melhor, abertura nova (aparece também no celular), histórico de pesquisa ao clicar na busca e o app não abaixa mais a própria música.",
-    "installer": "ListenUp-Windows-v1.2.1.zip"
+    "version": "1.2.2",
+    "zip": "ListenUp-Windows-app-v1.2.2.zip",
+    "notes": "Ícone novo com a logo maior e visível em qualquer tema do Mac.",
+    "installer": "ListenUp-Windows-v1.2.2.zip"
   },
   "android": {
-    "version": "1.2.1",
-    "apk": "ListenUp-1.2.1.apk",
-    "notes": "Título com fundo para ler melhor, abertura nova (aparece também no celular), histórico de pesquisa ao clicar na busca e o app não abaixa mais a própria música."
+    "version": "1.2.2",
+    "apk": "ListenUp-1.2.2.apk",
+    "notes": "Ícone novo com a logo maior e visível em qualquer tema do Mac."
   }
 }
