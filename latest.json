@@ -1,15 +1,16 @@
 {
-  "version": "1.1.9",
-  "zip": "SpotLo-fi-v1.1.9.zip",
-  "notes": "Botão de playlist na tela Tocando, busca só de playlists, tags automáticas do YouTube, músicas do aparelho e playlist dentro de playlist.",
+  "version": "1.2.0",
+  "zip": "ListenUp-v1.2.0.zip",
+  "notes": "SpotLo-fi agora é ListenUp: logo nova, fonte Space Grotesk e animação de abertura.",
   "win": {
-    "version": "1.1.9",
-    "zip": "SpotLo-fi-Windows-app-v1.1.9.zip",
-    "notes": "Botão de playlist na tela Tocando, busca só de playlists, tags automáticas do YouTube, músicas do aparelho e playlist dentro de playlist."
+    "version": "1.2.0",
+    "zip": "ListenUp-Windows-app-v1.2.0.zip",
+    "notes": "SpotLo-fi agora é ListenUp: logo nova, fonte Space Grotesk e animação de abertura.",
+    "installer": "ListenUp-Windows-v1.2.0.zip"
   },
   "android": {
-    "version": "1.1.9",
-    "apk": "SpotLo-fi-1.1.9.apk",
-    "notes": "Botão de playlist na tela Tocando, busca só de playlists, tags automáticas do YouTube, músicas do aparelho e playlist dentro de playlist."
+    "version": "1.2.0",
+    "apk": "ListenUp-1.2.0.apk",
+    "notes": "SpotLo-fi agora é ListenUp: logo nova, fonte Space Grotesk e animação de abertura."
   }
 }

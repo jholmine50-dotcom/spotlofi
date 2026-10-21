@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SpotLo-fi · Painel de uso</title>
+<title>ListenUp · Painel de uso</title>
 <meta name="robots" content="noindex">
 <style>
 :root{
@@ -69,7 +69,7 @@ footer{color:var(--faint);font-size:11.5px;line-height:1.6;margin-top:18px;text-
 <div class="wrap">
   <header>
     <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="13.5" width="4" height="7" rx="1.6" fill="#000"/><rect x="17" y="13.5" width="4" height="7" rx="1.6" fill="#000"/><path d="M9.5 13.5l2.5-1 2.5 1v5l-2.5-1-2.5 1z"/></svg></div>
-    <div><h1>SpotLo-fi · Painel de uso</h1><div class="sub">Quantas pessoas estão usando o app agora, em tempo real</div></div>
+    <div><h1>ListenUp · Painel de uso</h1><div class="sub">Quantas pessoas estão usando o app agora, em tempo real</div></div>
     <div class="status glass" id="status"><span class="dot" id="dot"></span><span id="statusTx">Conectando…</span></div>
   </header>
 
@@ -105,7 +105,7 @@ footer{color:var(--faint);font-size:11.5px;line-height:1.6;margin-top:18px;text-
     </div>
   </section>
 
-  <footer>Os números vêm do sinal anônimo que o SpotLo-fi envia a cada minuto (um código aleatório por aparelho, o sistema, a versão e se está tocando). Quem desliga “Contar meu uso” nos Ajustes não aparece aqui.<br>“Online ao longo do tempo” é guardado só neste navegador, a partir do momento em que o painel é aberto.</footer>
+  <footer>Os números vêm do sinal anônimo que o ListenUp envia a cada minuto (um código aleatório por aparelho, o sistema, a versão e se está tocando). Quem desliga “Contar meu uso” nos Ajustes não aparece aqui.<br>“Online ao longo do tempo” é guardado só neste navegador, a partir do momento em que o painel é aberto.</footer>
 </div>
 
 <script src="https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js"></script>
@@ -181,7 +181,7 @@ function render() {
     const on = isOnline(d), [name, color] = OS[d.os] || [d.os, 'var(--muted)'];
     const st = !on ? '<span class="tag">offline</span>' : d.playing ? '<span class="tag" style="background:rgba(42,212,106,.25)">🎵 ouvindo</span>' : '<span class="tag" style="background:rgba(42,212,106,.12)">aberto</span>';
     return `<tr><td>#${esc(String(d.id).slice(0, 6))}${d.together ? ' 👥' : ''}</td><td><span style="color:${color}">●</span> ${esc(name)}</td><td>${esc(d.v)}</td><td>${st}</td><td>${ago(d.t)}</td></tr>`;
-  }).join('') : '<tr><td colspan="5" class="empty">Esperando o primeiro sinal… abra o SpotLo-fi em algum aparelho.</td></tr>';
+  }).join('') : '<tr><td colspan="5" class="empty">Esperando o primeiro sinal… abra o ListenUp em algum aparelho.</td></tr>';
   $('lastUpd').textContent = 'atualizado ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 }
 
