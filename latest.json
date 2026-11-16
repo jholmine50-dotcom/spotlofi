@@ -1,12 +1,12 @@
 {
-  "version": "1.3.3",
-  "zip": "ListenUp-v1.3.3.zip",
-  "notes": "Novo Início com músicas pro seu gosto e canais recomendados. Importar do Spotify agora acha quase todas as músicas.",
+  "version": "1.3.4",
+  "zip": "ListenUp-v1.3.4.zip",
+  "notes": "Corrige o espaço vazio que aparecia ao rolar o Início até o fim no PC.",
   "win": {
-    "version": "1.3.3",
-    "zip": "ListenUp-Windows-app-v1.3.3.zip",
-    "notes": "Novo Início com músicas pro seu gosto e canais recomendados. Importar do Spotify agora acha quase todas as músicas.",
-    "installer": "ListenUp-Windows-v1.3.3.zip"
+    "version": "1.3.4",
+    "zip": "ListenUp-Windows-app-v1.3.4.zip",
+    "notes": "Corrige o espaço vazio que aparecia ao rolar o Início até o fim no PC.",
+    "installer": "ListenUp-Windows-v1.3.4.zip"
   },
   "android": {
     "version": "1.3.3",
