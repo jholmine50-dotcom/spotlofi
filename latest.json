@@ -1,20 +1,20 @@
 {
-  "version": "1.3.2",
-  "zip": "ListenUp-v1.3.2.zip",
-  "notes": "Importe playlists do Spotify: cada música vira a versão mais parecida do YouTube.",
+  "version": "1.3.3",
+  "zip": "ListenUp-v1.3.3.zip",
+  "notes": "Novo Início com músicas pro seu gosto e canais recomendados. Importar do Spotify agora acha quase todas as músicas.",
   "win": {
-    "version": "1.3.2",
-    "zip": "ListenUp-Windows-app-v1.3.2.zip",
-    "notes": "Importe playlists do Spotify: cada música vira a versão mais parecida do YouTube.",
-    "installer": "ListenUp-Windows-v1.3.2.zip"
+    "version": "1.3.3",
+    "zip": "ListenUp-Windows-app-v1.3.3.zip",
+    "notes": "Novo Início com músicas pro seu gosto e canais recomendados. Importar do Spotify agora acha quase todas as músicas.",
+    "installer": "ListenUp-Windows-v1.3.3.zip"
   },
   "android": {
-    "version": "1.3.2",
-    "apk": "ListenUp-1.3.2.apk",
-    "notes": "Importe playlists do Spotify: cada música vira a versão mais parecida do YouTube."
+    "version": "1.3.3",
+    "apk": "ListenUp-1.3.3.apk",
+    "notes": "Novo Início com músicas pro seu gosto e canais recomendados. Importar do Spotify agora acha quase todas as músicas."
   },
   "intro": {
-    "h": "https://cdn.jsdelivr.net/gh/jholmine50-dotcom/spotlofi@main/intro/1.3.2-h.mp4",
-    "v": "https://cdn.jsdelivr.net/gh/jholmine50-dotcom/spotlofi@main/intro/1.3.2-v.mp4"
+    "h": "https://cdn.jsdelivr.net/gh/jholmine50-dotcom/spotlofi@main/intro/1.3.3-h.mp4",
+    "v": "https://cdn.jsdelivr.net/gh/jholmine50-dotcom/spotlofi@main/intro/1.3.3-v.mp4"
   }
 }
