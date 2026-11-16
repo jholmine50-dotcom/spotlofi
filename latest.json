@@ -1,20 +1,20 @@
 {
-  "version": "1.3.1",
-  "zip": "ListenUp-v1.3.1.zip",
-  "notes": "Interface do PC volta a ter as 3 colunas em janelas médias. Vídeo das funções na primeira abertura.",
+  "version": "1.3.2",
+  "zip": "ListenUp-v1.3.2.zip",
+  "notes": "Importe playlists do Spotify: cada música vira a versão mais parecida do YouTube.",
   "win": {
-    "version": "1.3.1",
-    "zip": "ListenUp-Windows-app-v1.3.1.zip",
-    "notes": "Interface do PC volta a ter as 3 colunas em janelas médias. Vídeo das funções na primeira abertura.",
-    "installer": "ListenUp-Windows-v1.3.1.zip"
+    "version": "1.3.2",
+    "zip": "ListenUp-Windows-app-v1.3.2.zip",
+    "notes": "Importe playlists do Spotify: cada música vira a versão mais parecida do YouTube.",
+    "installer": "ListenUp-Windows-v1.3.2.zip"
   },
   "android": {
-    "version": "1.3.1",
-    "apk": "ListenUp-1.3.1.apk",
-    "notes": "App novo do ListenUp: instala ao lado do antigo. Depois ele te ajuda a trazer as playlists e desinstalar o antigo."
+    "version": "1.3.2",
+    "apk": "ListenUp-1.3.2.apk",
+    "notes": "Importe playlists do Spotify: cada música vira a versão mais parecida do YouTube."
   },
   "intro": {
-    "h": "https://cdn.jsdelivr.net/gh/jholmine50-dotcom/spotlofi@main/intro-h.mp4",
-    "v": "https://cdn.jsdelivr.net/gh/jholmine50-dotcom/spotlofi@main/intro-v.mp4"
+    "h": "https://cdn.jsdelivr.net/gh/jholmine50-dotcom/spotlofi@main/intro/1.3.2-h.mp4",
+    "v": "https://cdn.jsdelivr.net/gh/jholmine50-dotcom/spotlofi@main/intro/1.3.2-v.mp4"
   }
 }
