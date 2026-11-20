@@ -1,20 +1,20 @@
 {
-  "version": "1.3.7",
-  "zip": "ListenUp-v1.3.7.zip",
-  "notes": "Nova playlist \"Feito para você\", montada todo dia com o que você ouve. Agora dá para deixar suas playlists públicas e ver as da comunidade no Início.",
+  "version": "1.3.8",
+  "zip": "ListenUp-v1.3.8.zip",
+  "notes": "No Mac e no Windows agora tocam as músicas que antes só tocavam no celular (como as do Mundo Torajo). Sua biblioteca é copiada sozinha na primeira abertura.",
   "win": {
-    "version": "1.3.7",
-    "zip": "ListenUp-Windows-app-v1.3.7.zip",
-    "notes": "Nova playlist \"Feito para você\", montada todo dia com o que você ouve. Agora dá para deixar suas playlists públicas e ver as da comunidade no Início.",
-    "installer": "ListenUp-Windows-v1.3.7.zip"
+    "version": "1.3.8",
+    "zip": "ListenUp-Windows-app-v1.3.8.zip",
+    "notes": "No Mac e no Windows agora tocam as músicas que antes só tocavam no celular (como as do Mundo Torajo). Sua biblioteca é copiada sozinha na primeira abertura.",
+    "installer": "ListenUp-Windows-v1.3.8.zip"
   },
   "android": {
-    "version": "1.3.7",
-    "apk": "ListenUp-1.3.7.apk",
-    "notes": "Nova playlist \"Feito para você\", montada todo dia com o que você ouve. Agora dá para deixar suas playlists públicas e ver as da comunidade no Início."
+    "version": "1.3.8",
+    "apk": "ListenUp-1.3.8.apk",
+    "notes": "Correções internas. No PC, mais músicas passam a tocar."
   },
   "intro": {
-    "h": "https://cdn.jsdelivr.net/gh/jholmine50-dotcom/spotlofi@main/intro/1.3.7-h.mp4",
-    "v": "https://cdn.jsdelivr.net/gh/jholmine50-dotcom/spotlofi@main/intro/1.3.7-v.mp4"
+    "h": "https://cdn.jsdelivr.net/gh/jholmine50-dotcom/spotlofi@main/intro/1.3.8-h.mp4",
+    "v": "https://cdn.jsdelivr.net/gh/jholmine50-dotcom/spotlofi@main/intro/1.3.8-v.mp4"
   }
 }
