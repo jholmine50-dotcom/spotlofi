@@ -16,7 +16,7 @@ fi
 APP_NAME="ListenUp"
 OLD_NAME="SpotLo-fi"
 BUNDLE_ID="com.spotlofi.app"
-VERSION="1.3.8"
+VERSION="1.1.0"
 OUT="build/$APP_NAME.app"
 
 for f in main.swift extras.swift app112.swift SpotLo-fi.html; do

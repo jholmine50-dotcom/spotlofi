@@ -371,7 +371,7 @@ final class Updater {
     private(set) var latest: [String: Any]?
 
     private var manifestURL: URL {
-        URL(string: "https://raw.githubusercontent.com/\(updateRepo)/main/latest.json?t=\(Int(Date().timeIntervalSince1970))")!
+        URL(string: "https://raw.githubusercontent.com/\(updateRepo)/main/\(updateChannel)/latest.json?t=\(Int(Date().timeIntervalSince1970))")!
     }
 
     static func isNewer(_ a: String, than b: String) -> Bool {
@@ -397,7 +397,7 @@ final class Updater {
                 cb(j)
             }.resume()
         }
-        let api = URL(string: "https://api.github.com/repos/\(updateRepo)/contents/latest.json?ref=main&t=\(Int(Date().timeIntervalSince1970))")!
+        let api = URL(string: "https://api.github.com/repos/\(updateRepo)/contents/\(updateChannel)/latest.json?ref=main&t=\(Int(Date().timeIntervalSince1970))")!
         get(api, accept: "application/vnd.github.raw") { [weak self] j in
             if let j = j { done(j); return }
             guard let self = self else { done(nil); return }
@@ -444,6 +444,39 @@ final class Updater {
         }
     }
 
+    /// Troca o app atual pelo app pronto que veio no zip: um script espera o ListenUp fechar,
+    /// substitui o .app (guardando o antigo até dar certo), tira a quarentena e abre de novo.
+    private func installPrebuilt(newApp: String, base: URL) {
+        onEvent?(["update": ["state": "installing"]])
+        let dest = Bundle.main.bundlePath
+        let pid = ProcessInfo.processInfo.processIdentifier
+        let script = base.appendingPathComponent("install-fork.sh")
+        let body = """
+        #!/bin/bash
+        NEW="$1"; DEST="$2"; PID="$3"
+        for i in $(seq 1 120); do kill -0 "$PID" 2>/dev/null || break; sleep 0.25; done
+        rm -rf "$DEST.old"
+        if mv "$DEST" "$DEST.old" && ditto "$NEW" "$DEST"; then
+          rm -rf "$DEST.old"
+        else
+          rm -rf "$DEST"; mv "$DEST.old" "$DEST"
+        fi
+        xattr -dr com.apple.quarantine "$DEST" 2>/dev/null
+        open "$DEST"
+        """
+        do {
+            try body.write(to: script, atomically: true, encoding: .utf8)
+            let p = Process()
+            p.executableURL = URL(fileURLWithPath: "/bin/bash")
+            let q = { (s: String) in "'" + s.replacingOccurrences(of: "'", with: "'\\''") + "'" }
+            p.arguments = ["-c", "nohup /bin/bash \(q(script.path)) \(q(newApp)) \(q(dest)) \(pid) > /tmp/listenup-minefork-update.log 2>&1 &"]
+            try p.run()
+        } catch {
+            onEvent?(["update": ["state": "error", "message": "Não consegui iniciar a instalação."]]); return
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { NSApp.terminate(nil) }
+    }
+
     func install() {
         guard let j = latest, let zip = j["zip"] as? String else { check(manual: true); return }
         let zipURL: URL? = zip.hasPrefix("http") ? URL(string: zip)
@@ -466,6 +499,13 @@ final class Updater {
             unzip.executableURL = URL(fileURLWithPath: "/usr/bin/ditto")
             unzip.arguments = ["-x", "-k", zipPath.path, base.path]
             do { try unzip.run(); unzip.waitUntilExit() } catch {}
+            // Mine fork: o zip já traz o app pronto (compilado no GitHub) — só troca o app e reabre
+            if let items = try? fm.contentsOfDirectory(atPath: base.path),
+               let appName = items.first(where: { $0.hasSuffix(".app") }) {
+                let newApp = base.appendingPathComponent(appName).path
+                DispatchQueue.main.async { self.installPrebuilt(newApp: newApp, base: base) }
+                return
+            }
             // acha o build-app.sh
             var script: String?
             if let en = fm.enumerator(atPath: base.path) {

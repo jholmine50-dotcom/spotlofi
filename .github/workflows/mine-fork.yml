@@ -3,23 +3,23 @@ name: ListenUp Mine fork (Mac + mod)
 on:
   push:
     branches: [main]
-    paths: ["mine-fork/**", ".github/workflows/mine-fork.yml"]
+    paths: ["mine-fork/app/**", "mine-fork/mod/**", "mine-fork/version.json", ".github/workflows/mine-fork.yml"]
   workflow_dispatch:
 
 permissions:
   contents: write
+
+concurrency:
+  group: mine-fork
+  cancel-in-progress: false
 
 jobs:
   mac:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v5
-        with:
-          sparse-checkout: |
-            mine-fork
       - name: Usar o Xcode mais novo (com Apple Intelligence)
         run: |
-          ls -d /Applications/Xcode*.app
           X=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -1 || true)
           if [ -n "$X" ]; then sudo xcode-select -s "$X"; fi
           xcodebuild -version
@@ -37,10 +37,23 @@ jobs:
           lipo -info build/ListenUp.app/Contents/MacOS/ListenUp
           mkdir -p ../../out
           ditto -c -k --keepParent build/ListenUp.app ../../out/ListenUp-Mine-fork-Mac.zip
-          cp ../mod/ListenUpShow-1.0.0-fabric-1.21.1.jar ../../out/
-      - name: Publicar na página de download
+      - name: Publicar na página de download e avisar os apps do fork
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release view mine-fork >/dev/null 2>&1 || gh release create mine-fork --title "ListenUp Mine fork + mod ListenUp Show" --notes "Versão separada do ListenUp (não recebe atualizações) com a conexão pro mod do Minecraft, e o mod ListenUp Show (Fabric 1.21.1)."
-          gh release upload mine-fork out/ListenUp-Mine-fork-Mac.zip out/ListenUpShow-1.0.0-fabric-1.21.1.jar --clobber
+          set -e
+          V=$(jq -r .version mine-fork/version.json)
+          MOD=$(jq -r .mod mine-fork/version.json)
+          cp out/ListenUp-Mine-fork-Mac.zip "out/ListenUp-Mine-fork-Mac-v$V.zip"
+          cp "mine-fork/mod/$MOD" "out/$MOD"
+          gh release view mine-fork >/dev/null 2>&1 || gh release create mine-fork --title "ListenUp Mine fork + mod ListenUp Show" --notes "Versão separada do ListenUp com cara de Minecraft e o mod ListenUp Show (Fabric 1.21.1)."
+          gh release upload mine-fork "out/ListenUp-Mine-fork-Mac-v$V.zip" out/ListenUp-Mine-fork-Mac.zip "out/$MOD" --clobber
+          jq --arg zip "https://github.com/${{ github.repository }}/releases/download/mine-fork/ListenUp-Mine-fork-Mac-v$V.zip" \
+             '{version, zip: $zip, notes, mod, intro}' mine-fork/version.json > mine-fork/latest.json
+          cat mine-fork/latest.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add mine-fork/latest.json
+          git commit -m "Mine fork $V publicado" || exit 0
+          git pull --rebase origin main
+          git push origin HEAD:main
