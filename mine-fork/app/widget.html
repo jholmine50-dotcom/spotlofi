@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ListenUp widget</title>
+<style>
+:root{--c1:124,92,214;--c2:64,128,214}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:transparent;overflow:hidden;user-select:none;-webkit-user-select:none}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif;color:#f5f5f7;-webkit-font-smoothing:antialiased}
+.card{position:absolute;inset:0;border-radius:22px;overflow:hidden;background:rgba(18,18,28,.55);
+  -webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);
+  border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
+.bg{position:absolute;inset:-30%;z-index:0}
+.bg img{width:100%;height:100%;object-fit:cover;filter:blur(28px) saturate(1.8) brightness(.45);opacity:.9}
+.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(70% 70% at 20% 10%,rgba(var(--c1),.45),transparent 70%),radial-gradient(60% 60% at 90% 100%,rgba(var(--c2),.35),transparent 70%)}
+.drag{position:absolute;left:0;right:0;top:0;height:16px;z-index:5;-webkit-app-region:drag}
+.wrap{position:relative;z-index:1;height:100%;padding:14px 14px 12px;display:flex;flex-direction:column;gap:9px}
+.top{display:flex;gap:11px;align-items:center;min-width:0}
+.art{width:52px;height:52px;border-radius:12px;object-fit:cover;flex:none;background:linear-gradient(135deg,rgba(var(--c1),.8),rgba(var(--c2),.7));box-shadow:0 6px 18px rgba(0,0,0,.4)}
+.tx{flex:1;min-width:0}
+.t{font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.a{font-size:11.5px;opacity:.65;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.prog{height:4px;border-radius:4px;background:rgba(255,255,255,.18);overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:#fff;border-radius:4px;transition:width .5s linear}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ctr{display:flex;gap:2px}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;width:32px;height:32px;border-radius:50%;display:grid;place-items:center}
+button:hover{background:rgba(255,255,255,.14)}
+button.pp{background:#fff;color:#111;width:34px;height:34px}
+svg{width:16px;height:16px;fill:currentColor}
+.pomo{font-size:12px;font-variant-numeric:tabular-nums;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);cursor:pointer;white-space:nowrap}
+.pomo.run{background:rgba(var(--c1),.5)}
+.task{font-size:11.5px;opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;gap:6px;align-items:center}
+.task b{font-weight:600}
+.task .ok{width:18px;height:18px;border-radius:50%;border:1.5px solid rgba(255,255,255,.5);flex:none;cursor:pointer}
+.task .ok:hover{background:#30d158;border-color:transparent}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="drag"></div>
+  <div class="bg"><img id="bg" alt=""></div>
+  <div class="wrap">
+    <div class="top">
+      <img class="art" id="art" alt="">
+      <div class="tx"><div class="t" id="t">ListenUp</div><div class="a" id="a">Nada tocando</div></div>
+    </div>
+    <div class="prog"><i id="p"></i></div>
+    <div class="row">
+      <div class="ctr">
+        <button data-a="prev" title="Anterior"><svg viewBox="0 0 24 24"><path d="M19.5 5.6v12.8c0 .8-.9 1.2-1.5.8l-9.3-6.4c-.6-.4-.6-1.2 0-1.6L18 4.8c.6-.4 1.5 0 1.5.8z"/><rect x="4.5" y="5" width="2.7" height="14" rx="1.2"/></svg></button>
+        <button data-a="toggle" class="pp" id="pp" title="Tocar/Pausar"></button>
+        <button data-a="next" title="Próxima"><svg viewBox="0 0 24 24"><path d="M4.5 5.6v12.8c0 .8.9 1.2 1.5.8l9.3-6.4c.6-.4.6-1.2 0-1.6L6 4.8c-.6-.4-1.5 0-1.5.8z"/><rect x="16.8" y="5" width="2.7" height="14" rx="1.2"/></svg></button>
+      </div>
+      <span class="pomo" id="pomo" data-a="pomo" title="Iniciar/pausar o Pomodoro">🍅 25:00</span>
+      <button data-a="show" title="Abrir o ListenUp"><svg viewBox="0 0 24 24"><path d="M5 5h6v2H7v10h10v-4h2v6H5z"/><path d="M13 5h6v6h-2V8.4l-6.3 6.3-1.4-1.4L15.6 7H13z"/></svg></button>
+    </div>
+    <div class="task" id="task"></div>
+  </div>
+</div>
+<script>
+const PLAY='<svg viewBox="0 0 24 24"><path d="M7.5 4.8v14.4c0 .8.9 1.3 1.5.8l11.2-7.2c.6-.4.6-1.2 0-1.6L9 4c-.6-.5-1.5 0-1.5.8z"/></svg>';
+const PAUSE='<svg viewBox="0 0 24 24"><rect x="6" y="4.5" width="4.2" height="15" rx="1.3"/><rect x="13.8" y="4.5" width="4.2" height="15" rx="1.3"/></svg>';
+const $=id=>document.getElementById(id);
+const fmt=s=>{s=Math.max(0,Math.floor(s||0));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+const send=m=>{try{webkit.messageHandlers.widget.postMessage(m)}catch(e){}};
+let S={};
+window.upd=st=>{
+  S=st||{};
+  $('t').textContent=S.title||'ListenUp';$('a').textContent=S.title?(S.artist||''):'Nada tocando';
+  if(S.thumb&&$('art').getAttribute('src')!==S.thumb){$('art').src=S.thumb;$('bg').src=S.thumb}
+  if(!S.thumb){$('art').removeAttribute('src');$('bg').removeAttribute('src')}
+  if(S.c1)document.documentElement.style.setProperty('--c1',S.c1);
+  if(S.c2)document.documentElement.style.setProperty('--c2',S.c2);
+  $('pp').innerHTML=S.playing?PAUSE:PLAY;
+  $('p').style.width=(S.duration>0?Math.min(100,S.position/S.duration*100):0)+'%';
+  const P=S.pomo||{};
+  $('pomo').textContent=(P.mode==='brk'?'☕ ':'🍅 ')+fmt(P.left);
+  $('pomo').classList.toggle('run',!!P.run);
+  $('task').innerHTML=S.task?`<span class="ok" data-a="taskdone" title="Concluir tarefa"></span><span>Tarefa: <b></b></span>`:'';
+  if(S.task)$('task').querySelector('b').textContent=S.task;
+};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b)send({action:b.dataset.a})});
+$('pp').innerHTML=PLAY;
+send({action:'ready'});
+</script>
+</body>
+</html>

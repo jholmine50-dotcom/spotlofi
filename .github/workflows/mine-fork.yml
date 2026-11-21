@@ -1,0 +1,40 @@
+name: ListenUp Mine fork (Mac + mod)
+
+on:
+  push:
+    branches: [main]
+    paths: ["mine-fork/**", ".github/workflows/mine-fork.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  mac:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            mine-fork
+      - name: Compilar o app (Apple Silicon + Intel)
+        working-directory: mine-fork/app
+        run: |
+          set -e
+          BUILD_ONLY=1 ARCH=arm64 bash build-app.sh
+          mv build/ListenUp.app /tmp/arm.app
+          BUILD_ONLY=1 ARCH=x86_64 bash build-app.sh
+          lipo -create /tmp/arm.app/Contents/MacOS/ListenUp build/ListenUp.app/Contents/MacOS/ListenUp -output /tmp/ListenUp-uni
+          cp /tmp/ListenUp-uni build/ListenUp.app/Contents/MacOS/ListenUp
+          /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName 'ListenUp Mine fork'" build/ListenUp.app/Contents/Info.plist
+          codesign --force --deep --sign - build/ListenUp.app
+          lipo -info build/ListenUp.app/Contents/MacOS/ListenUp
+          mkdir -p ../../out
+          ditto -c -k --keepParent build/ListenUp.app ../../out/ListenUp-Mine-fork-Mac.zip
+          cp ../mod/ListenUpShow-1.0.0-fabric-1.21.1.jar ../../out/
+      - name: Publicar na página de download
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view mine-fork >/dev/null 2>&1 || gh release create mine-fork --title "ListenUp Mine fork + mod ListenUp Show" --notes "Versão separada do ListenUp (não recebe atualizações) com a conexão pro mod do Minecraft, e o mod ListenUp Show (Fabric 1.21.1)."
+          gh release upload mine-fork out/ListenUp-Mine-fork-Mac.zip out/ListenUpShow-1.0.0-fabric-1.21.1.jar --clobber
