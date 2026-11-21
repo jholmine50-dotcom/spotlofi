@@ -48,6 +48,13 @@ jobs:
           cp "mine-fork/mod/$MOD" "out/$MOD"
           gh release view mine-fork >/dev/null 2>&1 || gh release create mine-fork --title "ListenUp Mine fork + mod ListenUp Show" --notes "Versão separada do ListenUp com cara de Minecraft e o mod ListenUp Show (Fabric 1.21.1)."
           gh release upload mine-fork "out/ListenUp-Mine-fork-Mac-v$V.zip" out/ListenUp-Mine-fork-Mac.zip "out/$MOD" --clobber
+          # tira da página os arquivos de versões antigas (mod e app)
+          gh release view mine-fork --json assets --jq '.assets[].name' | while read -r A; do
+            case "$A" in
+              "ListenUp-Mine-fork-Mac.zip"|"ListenUp-Mine-fork-Mac-v$V.zip"|"$MOD") ;;
+              ListenUpShow-*|ListenUp-Mine-fork-Mac-v*) gh release delete-asset mine-fork "$A" -y ;;
+            esac
+          done
           jq --arg zip "https://github.com/${{ github.repository }}/releases/download/mine-fork/ListenUp-Mine-fork-Mac-v$V.zip" \
              '{version, zip: $zip, notes, mod, intro}' mine-fork/version.json > mine-fork/latest.json
           cat mine-fork/latest.json
