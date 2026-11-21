@@ -1,0 +1,10 @@
+{
+  "version": "1.1.0",
+  "zip": "https://github.com/jholmine50-dotcom/spotlofi/releases/download/mine-fork/ListenUp-Mine-fork-Mac-v1.1.0.zip",
+  "notes": "Mine fork 1.1: o app ficou com a cara do Minecraft e agora atualiza sozinho, só no fork. Mod 1.1: a letra se espalha pelo mundo do jogo.",
+  "mod": "ListenUpShow-1.1.0-fabric-1.21.1.jar",
+  "intro": {
+    "h": "https://cdn.jsdelivr.net/gh/jholmine50-dotcom/spotlofi@main/mine-fork/intro/1.1.0-h.mp4",
+    "v": "https://cdn.jsdelivr.net/gh/jholmine50-dotcom/spotlofi@main/mine-fork/intro/1.1.0-v.mp4"
+  }
+}
