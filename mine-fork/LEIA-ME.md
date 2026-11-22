@@ -19,6 +19,7 @@ Depois disso o app se atualiza sozinho: quando sair versão nova do fork, aparec
 ## Mod
 - A letra se espalha pelo mundo: cada linha fica presa num ponto do terreno, sempre pelo menos 1 bloco acima do chão, e as palavras aparecem uma a uma.
 - No F7, o botão "Letra" alterna entre: no mundo, na tela, e mundo + tela.
+- No F7, "Palavras por frase" quebra as linhas longas em pedaços (0 = linha inteira). A porta do ListenCraft fica em config/listenupshow.json.
 - Teclas: F7 ajustes (dá pra trocar pra letra na tela) · F8 letras · F9 luzes · [ e ] sincronia · /listenup status.
 
 ## Como publicar uma versão nova do ListenCraft
