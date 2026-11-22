@@ -15,7 +15,7 @@ import MediaPlayer
 import ServiceManagement
 import UniformTypeIdentifiers
 
-let appVersion = "1.1.0"   // Mine fork (numeração própria)
+let appVersion = "1.2.0"   // Mine fork (numeração própria)
 let updateChannel = "mine-fork"   // canal de atualização só do fork
 
 // MARK: - Monitor de áudio (macOS 14.2+)
@@ -115,7 +115,7 @@ func duckStateJSON() -> Data {
             let path = processPath(pid)
             let isWebKitHelper = path.contains("WebKit") || name.lowercased().contains("webkit") || audioBundle(id).hasPrefix("com.apple.WebKit")
             if isWebKitHelper && (owner == pid || responsibleFn == nil || name.lowercased().contains("webkit")) { continue }
-            if name == "ListenUp" || name == "SpotLo-fi" || audioBundle(id) == "com.spotlofi.app" { continue }
+            if name == "ListenUp" || name == "ListenCraft" || name == "SpotLo-fi" || audioBundle(id) == "com.spotlofi.app" { continue }
             if seen.insert(name).inserted {
                 playing.append(["pid": Int(owner), "bundle": audioBundle(id), "app": name])
             }
@@ -503,6 +503,32 @@ final class LocalServer {
     }
 }
 
+// MARK: - ListenCraft: troca o nome do app antigo
+
+/// Quem atualizou do Mine fork 1.1.0 fica com o app novo dentro de "ListenUp.app".
+/// Na primeira abertura, ele se renomeia para "ListenCraft.app" (uma tentativa só) e reabre.
+func renameToListenCraftIfNeeded() -> Bool {
+    let url = Bundle.main.bundleURL
+    let name = url.lastPathComponent
+    guard name != "ListenCraft.app", name.hasSuffix(".app"),
+          !url.path.contains("AppTranslocation"), !url.path.contains("/build/") else { return false }
+    let key = "listencraft.renameTried"
+    if UserDefaults.standard.bool(forKey: key) { return false }
+    UserDefaults.standard.set(true, forKey: key)
+    let target = url.deletingLastPathComponent().appendingPathComponent("ListenCraft.app").path
+    if FileManager.default.fileExists(atPath: target) { return false }
+    let pid = ProcessInfo.processInfo.processIdentifier
+    let q = { (s: String) in "'" + s.replacingOccurrences(of: "'", with: "'\\''") + "'" }
+    let script = "for i in $(seq 1 80); do kill -0 \(pid) 2>/dev/null || break; sleep 0.25; done; " +
+        "if mv \(q(url.path)) \(q(target)); then open \(q(target)); else open \(q(url.path)); fi"
+    let p = Process()
+    p.executableURL = URL(fileURLWithPath: "/bin/bash")
+    p.arguments = ["-c", "nohup /bin/bash -c \(q(script)) > /tmp/listencraft-rename.log 2>&1 &"]
+    do { try p.run() } catch { return false }
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { NSApp.terminate(nil) }
+    return true
+}
+
 // MARK: - App
 
 final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, WKUIDelegate, WKScriptMessageHandler, NSMenuDelegate {
@@ -533,6 +559,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, WKUI
     let autosaveName = "SpotLoFiMain"
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        if renameToListenCraftIfNeeded() { return }
         buildMenu()
         setupStatusItem()
         setupRemoteCommands()
@@ -565,7 +592,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, WKUI
         window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 1280, height: 820),
                           styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
                           backing: .buffered, defer: false)
-        window.title = "ListenUp"
+        window.title = "ListenCraft"
         window.titlebarAppearsTransparent = true
         window.titleVisibility = .hidden
         window.backgroundColor = NSColor(red: 0.03, green: 0.03, blue: 0.05, alpha: 1)
@@ -681,7 +708,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, WKUI
         let blank = url == nil || url!.absoluteString.isEmpty || url!.absoluteString == "about:blank"
         let loginHosts = ["accounts.spotify.com", "accounts.google.com", "appleid.apple.com", "facebook.com", "challenge.spotify.com"]
         if blank || loginHosts.contains(where: { host.hasSuffix($0) }) {
-            return makePopup(configuration: configuration, title: "ListenUp")
+            return makePopup(configuration: configuration, title: "ListenCraft")
         }
         if let u = url { NSWorkspace.shared.open(u) }
         return nil
@@ -800,7 +827,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, WKUI
         } else {
             item.button?.title = "♪"
         }
-        item.button?.toolTip = "ListenUp"
+        item.button?.toolTip = "ListenCraft"
         let menu = NSMenu()
         menu.delegate = self
         item.menu = menu
@@ -843,11 +870,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, WKUI
         let mini = NSMenuItem(title: isMini ? "Sair do modo mini" : "Modo mini", action: #selector(toggleMini), keyEquivalent: "")
         mini.target = self
         menu.addItem(mini)
-        let show = NSMenuItem(title: "Mostrar ListenUp", action: #selector(showMain), keyEquivalent: "")
+        let show = NSMenuItem(title: "Mostrar ListenCraft", action: #selector(showMain), keyEquivalent: "")
         show.target = self
         menu.addItem(show)
         menu.addItem(.separator())
-        menu.addItem(NSMenuItem(title: "Sair do ListenUp", action: #selector(NSApplication.terminate(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Sair do ListenCraft", action: #selector(NSApplication.terminate(_:)), keyEquivalent: ""))
     }
 
     @objc func statusAction(_ sender: NSMenuItem) {
@@ -884,7 +911,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, WKUI
 
     func updateNowPlaying() {
         var info: [String: Any] = [
-            MPMediaItemPropertyTitle: npTitle.isEmpty ? "ListenUp" : npTitle,
+            MPMediaItemPropertyTitle: npTitle.isEmpty ? "ListenCraft" : npTitle,
             MPMediaItemPropertyArtist: npArtist,
             MPNowPlayingInfoPropertyPlaybackRate: npPlaying ? 1.0 : 0.0,
             MPNowPlayingInfoPropertyElapsedPlaybackTime: npPosition
@@ -894,7 +921,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, WKUI
         let center = MPNowPlayingInfoCenter.default()
         center.nowPlayingInfo = info
         center.playbackState = npPlaying ? .playing : .paused
-        statusItem?.button?.toolTip = npTitle.isEmpty ? "ListenUp" : "\(npTitle) — ListenUp"
+        statusItem?.button?.toolTip = npTitle.isEmpty ? "ListenCraft" : "\(npTitle) — ListenCraft"
     }
 
     func loadArtwork(_ urlString: String) {
@@ -967,9 +994,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, WKUI
 
         let appItem = NSMenuItem()
         main.addItem(appItem)
-        let appMenu = NSMenu(title: "ListenUp")
+        let appMenu = NSMenu(title: "ListenCraft")
         appItem.submenu = appMenu
-        appMenu.addItem(withTitle: "Sobre o ListenUp", action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: "")
+        appMenu.addItem(withTitle: "Sobre o ListenCraft", action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: "")
         appMenu.addItem(.separator())
         let sp = appMenu.addItem(withTitle: "Entrar no Spotify…", action: #selector(openSpotifyLogin), keyEquivalent: "")
         sp.target = self
@@ -977,11 +1004,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, WKUI
         let upd = appMenu.addItem(withTitle: "Verificar atualizações…", action: #selector(checkUpdatesMenu), keyEquivalent: "")
         upd.target = self
         appMenu.addItem(.separator())
-        appMenu.addItem(withTitle: "Ocultar ListenUp", action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
+        appMenu.addItem(withTitle: "Ocultar ListenCraft", action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
         let others = appMenu.addItem(withTitle: "Ocultar outros", action: #selector(NSApplication.hideOtherApplications(_:)), keyEquivalent: "h")
         others.keyEquivalentModifierMask = [.command, .option]
         appMenu.addItem(.separator())
-        appMenu.addItem(withTitle: "Sair do ListenUp", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        appMenu.addItem(withTitle: "Sair do ListenCraft", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
 
         let editItem = NSMenuItem()
         main.addItem(editItem)
@@ -1022,7 +1049,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, WKUI
         let win = NSMenu(title: "Janela")
         winItem.submenu = win
         win.addItem(withTitle: "Minimizar", action: #selector(NSWindow.performMiniaturize(_:)), keyEquivalent: "m")
-        let show = win.addItem(withTitle: "Mostrar ListenUp", action: #selector(showMain), keyEquivalent: "1")
+        let show = win.addItem(withTitle: "Mostrar ListenCraft", action: #selector(showMain), keyEquivalent: "1")
         show.target = self
         NSApp.windowsMenu = win
 

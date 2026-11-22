@@ -1,4 +1,4 @@
-name: ListenUp Mine fork (Mac + mod)
+name: ListenCraft (Mac + mod)
 
 on:
   push:
@@ -28,15 +28,15 @@ jobs:
         run: |
           set -e
           BUILD_ONLY=1 ARCH=arm64 bash build-app.sh
-          mv build/ListenUp.app /tmp/arm.app
+          mv build/ListenCraft.app /tmp/arm.app
           BUILD_ONLY=1 ARCH=x86_64 bash build-app.sh
-          lipo -create /tmp/arm.app/Contents/MacOS/ListenUp build/ListenUp.app/Contents/MacOS/ListenUp -output /tmp/ListenUp-uni
-          cp /tmp/ListenUp-uni build/ListenUp.app/Contents/MacOS/ListenUp
-          /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName 'ListenUp Mine fork'" build/ListenUp.app/Contents/Info.plist
-          codesign --force --deep --sign - build/ListenUp.app
-          lipo -info build/ListenUp.app/Contents/MacOS/ListenUp
+          lipo -create /tmp/arm.app/Contents/MacOS/ListenCraft build/ListenCraft.app/Contents/MacOS/ListenCraft -output /tmp/ListenCraft-uni
+          cp /tmp/ListenCraft-uni build/ListenCraft.app/Contents/MacOS/ListenCraft
+          /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName ListenCraft" build/ListenCraft.app/Contents/Info.plist
+          codesign --force --deep --sign - build/ListenCraft.app
+          lipo -info build/ListenCraft.app/Contents/MacOS/ListenCraft
           mkdir -p ../../out
-          ditto -c -k --keepParent build/ListenUp.app ../../out/ListenUp-Mine-fork-Mac.zip
+          ditto -c -k --keepParent build/ListenCraft.app ../../out/ListenCraft-Mac.zip
       - name: Publicar na página de download e avisar os apps do fork
         env:
           GH_TOKEN: ${{ github.token }}
@@ -44,23 +44,24 @@ jobs:
           set -e
           V=$(jq -r .version mine-fork/version.json)
           MOD=$(jq -r .mod mine-fork/version.json)
-          cp out/ListenUp-Mine-fork-Mac.zip "out/ListenUp-Mine-fork-Mac-v$V.zip"
+          cp out/ListenCraft-Mac.zip "out/ListenCraft-Mac-v$V.zip"
           cp "mine-fork/mod/$MOD" "out/$MOD"
-          gh release view mine-fork >/dev/null 2>&1 || gh release create mine-fork --title "ListenUp Mine fork + mod ListenUp Show" --notes "Versão separada do ListenUp com cara de Minecraft e o mod ListenUp Show (Fabric 1.21.1)."
-          gh release upload mine-fork "out/ListenUp-Mine-fork-Mac-v$V.zip" out/ListenUp-Mine-fork-Mac.zip "out/$MOD" --clobber
+          gh release view mine-fork >/dev/null 2>&1 || gh release create mine-fork --title "ListenCraft + mod ListenUp Show" --notes "ListenCraft (o ListenUp com cara de Minecraft) e o mod ListenUp Show (Fabric 1.21.1)."
+          gh release edit mine-fork --title "ListenCraft + mod ListenUp Show" --notes "ListenCraft (o ListenUp com cara de Minecraft) e o mod ListenUp Show (Fabric 1.21.1)." || true
+          gh release upload mine-fork "out/ListenCraft-Mac-v$V.zip" out/ListenCraft-Mac.zip "out/$MOD" --clobber
           # tira da página os arquivos de versões antigas (mod e app)
           gh release view mine-fork --json assets --jq '.assets[].name' | while read -r A; do
             case "$A" in
-              "ListenUp-Mine-fork-Mac.zip"|"ListenUp-Mine-fork-Mac-v$V.zip"|"$MOD") ;;
-              ListenUpShow-*|ListenUp-Mine-fork-Mac-v*) gh release delete-asset mine-fork "$A" -y ;;
+              "ListenCraft-Mac.zip"|"ListenCraft-Mac-v$V.zip"|"$MOD") ;;
+              ListenUpShow-*|ListenUp-Mine-fork-Mac*|ListenCraft-Mac-v*) gh release delete-asset mine-fork "$A" -y ;;
             esac
           done
-          jq --arg zip "https://github.com/${{ github.repository }}/releases/download/mine-fork/ListenUp-Mine-fork-Mac-v$V.zip" \
+          jq --arg zip "https://github.com/${{ github.repository }}/releases/download/mine-fork/ListenCraft-Mac-v$V.zip" \
              '{version, zip: $zip, notes, mod, intro}' mine-fork/version.json > mine-fork/latest.json
           cat mine-fork/latest.json
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add mine-fork/latest.json
-          git commit -m "Mine fork $V publicado" || exit 0
+          git commit -m "ListenCraft $V publicado" || exit 0
           git pull --rebase origin main
           git push origin HEAD:main

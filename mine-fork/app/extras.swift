@@ -453,13 +453,14 @@ final class Updater {
         let script = base.appendingPathComponent("install-fork.sh")
         let body = """
         #!/bin/bash
-        NEW="$1"; DEST="$2"; PID="$3"
+        NEW="$1"; OLD="$2"; PID="$3"
+        DEST="$(dirname "$OLD")/$(basename "$NEW")"
         for i in $(seq 1 120); do kill -0 "$PID" 2>/dev/null || break; sleep 0.25; done
-        rm -rf "$DEST.old"
-        if mv "$DEST" "$DEST.old" && ditto "$NEW" "$DEST"; then
-          rm -rf "$DEST.old"
+        rm -rf "$OLD.old"
+        if mv "$OLD" "$OLD.old" && { [ "$DEST" = "$OLD" ] || rm -rf "$DEST"; } && ditto "$NEW" "$DEST"; then
+          rm -rf "$OLD.old"
         else
-          rm -rf "$DEST"; mv "$DEST.old" "$DEST"
+          rm -rf "$DEST"; mv "$OLD.old" "$OLD"; DEST="$OLD"
         fi
         xattr -dr com.apple.quarantine "$DEST" 2>/dev/null
         open "$DEST"

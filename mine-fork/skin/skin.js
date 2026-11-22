@@ -2,15 +2,22 @@
 /* ================= MINE FORK: comportamento da pele ================= */
 (function(){
   document.body.classList.add('mc');
+  // ListenCraft não tem assistente: desliga a escuta/voz e ignora o atalho do assistente
+  try{
+    if(S.settings&&S.settings.ai){const was=S.settings.ai.wake;S.settings.ai.wake=false;S.settings.ai.speak=false;save();
+      if(was&&IN_APP)nativeCmd('voice',{mode:'wakeOff'})}
+    if(S.settings&&S.settings.hotkeys&&S.settings.hotkeys.voice)delete S.settings.hotkeys.voice;
+  }catch(e){}
+  try{window.toggleAI=function(){};}catch(e){}
   // frase amarela ao lado do logo da barra de título
-  const SPLASH=['Mine fork!','Agora no Minecraft!','Letra no mundo!','Feito em blocos!','Bora de show!','Também tem holofote!'];
+  const SPLASH=['ListenCraft!','Agora no Minecraft!','Letra no mundo!','Feito em blocos!','Bora de show!','Também tem holofote!'];
   function splash(){
     if(document.querySelector('.mc-splash'))return;
     const host=document.querySelector('.titlebar'); if(!host)return;
     // acha o "ListenUp" da barra (o menor elemento com esse texto)
     let logo=null;
     host.querySelectorAll('*').forEach(e=>{const t=(e.textContent||'').trim();const r=e.getBoundingClientRect();
-      if(/^ListenUp$/.test(t)&&r.width>0&&(!logo||r.width<=logo.getBoundingClientRect().width))logo=e});
+      if(/^ListenCraft$/.test(t)&&r.width>0&&(!logo||r.width<=logo.getBoundingClientRect().width))logo=e});
     const s=document.createElement('div'); s.className='mc-splash';
     s.textContent=SPLASH[Math.floor(Math.random()*SPLASH.length)];
     if(getComputedStyle(host).position==='static')host.style.position='relative';

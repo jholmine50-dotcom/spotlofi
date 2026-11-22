@@ -75,3 +75,10 @@ body.mc kbd, body.mc .kbd{background:#000 !important;border:1px solid #a0a0a0 !i
 body.mc .mc-splash{position:absolute;color:var(--mc-yellow);font:700 12px var(--font);text-shadow:2px 2px 0 #3f3f00;transform:rotate(-14deg);white-space:nowrap;pointer-events:none;
   animation:mcSplash .5s ease-in-out infinite alternate;z-index:50}
 @keyframes mcSplash{from{transform:rotate(-14deg) scale(1)}to{transform:rotate(-14deg) scale(1.09)}}
+
+/* ListenCraft: sem assistente */
+body.mc #tbAI, body.mc [data-dock="ai"], body.mc #aiPanel, body.mc .ai-set,
+body.mc .set-row:has([data-hk="voice"]), body.mc *:has(> [data-hk="voice"]):not(body):not(#setPop){display:none !important}
+
+/* ListenCraft: "Craft" mais claro pra ler no fundo escuro */
+body.mc .wm b{color:#9d72ff !important;text-shadow:2px 2px 0 #1d0b4d !important}

@@ -13,10 +13,10 @@ if [ "$UPDATE_MODE" = 1 ]; then
   trap 'rc=$?; if [ $rc -ne 0 ] && [ ! -f "$UPD_DIR/FAILED" ]; then { echo "o instalador parou (código $rc)"; tail -n 20 /tmp/spotlofi-update.log 2>/dev/null; } > "$UPD_DIR/FAILED"; fi' EXIT
 fi
 
-APP_NAME="ListenUp"
+APP_NAME="ListenCraft"
 OLD_NAME="SpotLo-fi"
 BUNDLE_ID="com.spotlofi.app"
-VERSION="1.1.0"
+VERSION="1.2.0"
 OUT="build/$APP_NAME.app"
 
 for f in main.swift extras.swift app112.swift SpotLo-fi.html; do
@@ -97,13 +97,13 @@ cat > "$OUT/Contents/Info.plist" <<EOF
   <key>LSApplicationCategoryType</key><string>public.app-category.music</string>
   <key>NSHighResolutionCapable</key><true/>
   <key>NSPrincipalClass</key><string>NSApplication</string>
-  <key>NSHumanReadableCopyright</key><string>ListenUp</string>
-  <key>NSMicrophoneUsageDescription</key><string>O ListenUp usa o microfone para ouvir seus comandos de voz e para as chamadas do Estudar junto.</string>
-  <key>NSSpeechRecognitionUsageDescription</key><string>O ListenUp transforma sua voz em comandos para a IA do app.</string>
+  <key>NSHumanReadableCopyright</key><string>ListenCraft</string>
+  <key>NSMicrophoneUsageDescription</key><string>O ListenCraft usa o microfone para ouvir seus comandos de voz e para as chamadas do Estudar junto.</string>
+  <key>NSSpeechRecognitionUsageDescription</key><string>O ListenCraft transforma sua voz em comandos para a IA do app.</string>
   <key>CFBundleURLTypes</key>
   <array>
     <dict>
-      <key>CFBundleURLName</key><string>ListenUp</string>
+      <key>CFBundleURLName</key><string>ListenCraft</string>
       <key>CFBundleURLSchemes</key><array><string>spotlofi</string></array>
     </dict>
   </array>
