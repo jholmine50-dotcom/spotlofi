@@ -15,7 +15,7 @@ import MediaPlayer
 import ServiceManagement
 import UniformTypeIdentifiers
 
-let appVersion = "1.2.0"   // Mine fork (numeração própria)
+let appVersion = "1.3.0"   // Mine fork (numeração própria)
 let updateChannel = "mine-fork"   // canal de atualização só do fork
 
 // MARK: - Monitor de áudio (macOS 14.2+)
